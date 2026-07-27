@@ -11,7 +11,8 @@ app.use(cors());
 app.use(express.json());
 
 // ✅ MongoDB Connection
-const uri = "mongodb+srv://dshanthini:dsha2006@cluster0.nitvbb2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = "mongodb+srv://dshanthini:dsha2006@cluster0.nitvbb2.mongodb.net/?appName=Cluster0";
+
 
 const client = new MongoClient(uri, {
   serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true },
