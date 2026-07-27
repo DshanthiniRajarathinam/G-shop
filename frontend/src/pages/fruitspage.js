@@ -43,13 +43,13 @@ const FruitsPage = () => {
                 e.currentTarget.style.transform = "scale(1)";
                 e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
               }}
-            >
+            > 
               <img
                 src={item.image}
                 className="card-img-top"
                 alt={item.title}
                 style={{ height: "180px", objectFit: "contain" }}
-              />
+              /> 
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title">{item.title}</h5>
                 <p className="card-text small flex-grow-1">{item.description}</p>

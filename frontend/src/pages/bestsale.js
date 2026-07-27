@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/cartSlice";
+import axios from "axios";
+
 
 import img9 from '../assests/images-removebg-preview.png';
 import img10 from '../assests/pineapple-removebg-preview.png';
@@ -19,9 +21,11 @@ import img22 from '../assests/carrot.jpg';
 import img23 from '../assests/beetroot.png';
 import img24 from '../assests/onion.jpg';
 
+
 const Bestsale = () => {
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
+  const [recording, setRecording] = useState(false);
 
   const sections = {
     Fruits: [
@@ -43,13 +47,14 @@ const Bestsale = () => {
       { id: 14, image: img22, title: "Carrot", description: "Crunchy carrots, sweet and vitamin-rich.", price: 40 },
       { id: 15, image: img23, title: "Beetroot", description: "Earthy beetroots, iron and fiber-rich.", price: 25 },
       { id: 16, image: img24, title: "Onion", description: "Pungent onions, flavor-packed and healthy.", price: 5 }
-    ]
-  };
+    ],
+};
 
   const allProducts = Object.values(sections).flat();
 
   const filteredProducts = allProducts.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const renderProducts = (items) => (
@@ -91,13 +96,68 @@ const Bestsale = () => {
     </div>
   );
 
+  // --- Voice search with AssemblyAI ---
+  const startRecording = async () => {
+    setRecording(true);
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mediaRecorder = new MediaRecorder(stream);
+    let chunks = [];
+
+    mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+
+    mediaRecorder.onstop = async () => {
+      const blob = new Blob(chunks, { type: "audio/webm" });
+      const file = new File([blob], "voice.webm", { type: "audio/webm" });
+      await sendToAssemblyAI(file);
+      setRecording(false);
+    };
+
+    mediaRecorder.start();
+    // Stop after 5 seconds
+    setTimeout(() => mediaRecorder.stop(), 5000);
+  };
+
+  const sendToAssemblyAI = async (file) => {
+    try {
+      // 1. Upload
+      const uploadRes = await axios.post("https://api.assemblyai.com/v2/upload", file, {
+        headers: { authorization: "bc897ff170b24c148eaaf6c00e87915e", "content-type": file.type },
+      });
+      const audioUrl = uploadRes.data.upload_url;
+
+      // 2. Transcribe
+      const transcriptRes = await axios.post(
+        "https://api.assemblyai.com/v2/transcript",
+        { audio_url: audioUrl },
+        { headers: { authorization: "bc897ff170b24c148eaaf6c00e87915e" } }
+      );
+
+      const transcriptId = transcriptRes.data.id;
+      let transcriptText = "";
+
+      // 3. Polling
+      while (!transcriptText) {
+        const res = await axios.get(
+          `https://api.assemblyai.com/v2/transcript/${transcriptId}`,
+          { headers: { authorization: "bc897ff170b24c148eaaf6c00e87915e" } }
+        );
+
+        if (res.data.status === "completed") transcriptText = res.data.text;
+        else if (res.data.status === "failed") throw new Error("Transcription failed");
+        else await new Promise((r) => setTimeout(r, 2000));
+      }
+
+      setSearchTerm(transcriptText);
+    } catch (err) {
+      console.error(err);
+      setRecording(false);
+    }
+  };
+
   return (
-    <div
-      className="bestsale container-fluid py-4"
-      style={{ backgroundColor: "#f6fdf7", minHeight: "100vh" }}
-    >
-      {/* Search Bar */}
-      <div className="container mb-4">
+    <div className="bestsale container-fluid py-4" style={{ backgroundColor: "#f6fdf7", minHeight: "100vh" }}>
+      {/* Search Bar + Voice */}
+      <div className="container mb-4 d-flex">
         <input
           type="text"
           className="form-control"
@@ -105,12 +165,17 @@ const Bestsale = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        <button className="btn btn-outline-primary ms-2" onClick={startRecording}>
+          {recording ? "🎙️ Recording..." : "🎙️"}
+        </button>
       </div>
 
-      {/* Show filtered products if searching, else show all sections */}
+      {/* Filtered or All Sections */}
       <div className="container">
         {searchTerm
-          ? renderProducts(filteredProducts)
+          ? filteredProducts.length > 0
+            ? renderProducts(filteredProducts)
+            : <p className="text-center text-muted">No products found!</p>
           : Object.entries(sections).map(([title, items]) => (
               <section className="my-5" key={title}>
                 <h2 className="mb-4">{title}</h2>

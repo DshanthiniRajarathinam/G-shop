@@ -1,38 +1,64 @@
-import React from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import React from "react";
+import {
+  useUser,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
+import "./profile.css";   // 👈 add this
 
-const UserProfile = () => {
+const Profile = () => {
+  const { user } = useUser();
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  if (!user) return <Navigate to="/login" />;
-
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/login");
-  };
 
   return (
-    <div className="d-flex flex-column min-vh-100">
-      {/* Profile Content */}
-      <div className="container flex-grow-1 d-flex justify-content-center align-items-center">
-        <div className="card shadow p-4" style={{ maxWidth: "500px", width: "100%" }}>
-          <h2 className="mb-3 text-center">👤 User Profile</h2>
-          <p><strong>Name:</strong> {user.name || "N/A"}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <button 
-            className="btn btn-danger px-3 py-2 mt-3 w-100"
-            onClick={handleLogout}
+    <>
+      <SignedIn>
+        <div className="profile-wrapper">
+          <div className="profile-card">
+
+            <h2 className="profile-title">My Profile</h2>
+
+            <img
+              src={user?.imageUrl}
+              alt="Profile"
+              className="profile-img"
+            />
+
+            <h5 className="mt-3">{user?.fullName}</h5>
+            <p className="text-muted">
+              {user?.primaryEmailAddress?.emailAddress}
+            </p>
+
+            <div className="profile-actions">
+              <button
+                className="btn btn-success px-4"
+                onClick={() => navigate("/")}
+              >
+                Go to Shop
+              </button>
+
+              <UserButton afterSignOutUrl="/login" />
+            </div>
+
+          </div>
+        </div>
+      </SignedIn>
+
+      <SignedOut>
+        <div className="container mt-5 text-center">
+          <h4>Please login to view profile</h4>
+          <button
+            className="btn btn-primary mt-3"
+            onClick={() => navigate("/login")}
           >
-            Logout
+            Login
           </button>
         </div>
-      </div>
-
-      {/* Footer (slightly above bottom) */}
-      
-    </div>
+      </SignedOut>
+    </>
   );
 };
 
-export default UserProfile;
+export default Profile;
