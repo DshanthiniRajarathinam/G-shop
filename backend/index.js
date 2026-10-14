@@ -1,5 +1,6 @@
 const express = require("express");
 require("dotenv").config();
+const multer = require("multer");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const Razorpay = require("razorpay");
@@ -11,6 +12,89 @@ const port = process.env.PORT || 6005;
 app.use(cors());
 app.use(express.json());
 
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
+
+app.post("/api/voice-search", upload.single("audio"), async (req, res) => {
+  try {
+    const apiKey = process.env.ASSEMBLYAI_API_KEY;
+
+    if (!apiKey) {
+      return res.status(500).json({ error: "Voice search is not configured." });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "Audio file is required." });
+    }
+
+    const uploadResponse = await fetch("https://api.assemblyai.com/v2/upload", {
+      method: "POST",
+      headers: {
+        authorization: apiKey,
+        "content-type": req.file.mimetype || "application/octet-stream",
+      },
+      body: req.file.buffer,
+    });
+
+    const uploadData = await uploadResponse.json();
+
+    if (!uploadResponse.ok) {
+      console.error("Audio upload failed:", uploadData);
+      return res.status(502).json({ error: "Audio upload failed." });
+    }
+
+    const transcriptResponse = await fetch(
+      "https://api.assemblyai.com/v2/transcript",
+      {
+        method: "POST",
+        headers: {
+          authorization: apiKey,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ audio_url: uploadData.upload_url }),
+      }
+    );
+
+    const transcriptData = await transcriptResponse.json();
+
+    if (!transcriptResponse.ok) {
+      console.error("Transcription request failed:", transcriptData);
+      return res.status(502).json({ error: "Transcription request failed." });
+    }
+
+    for (let i = 0; i < 30; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      const resultResponse = await fetch(
+        `https://api.assemblyai.com/v2/transcript/${transcriptData.id}`,
+        { headers: { authorization: apiKey } }
+      );
+
+      const result = await resultResponse.json();
+
+      if (!resultResponse.ok) {
+        return res.status(502).json({ error: "Could not get transcription." });
+      }
+
+      if (result.status === "completed") {
+        return res.json({ text: result.text || "" });
+      }
+
+      if (result.status === "error") {
+        return res.status(422).json({ error: "Audio transcription failed." });
+      }
+    }
+
+    return res.status(504).json({ error: "Transcription timed out. Try again." });
+  } catch (error) {
+    console.error("Voice search error:", error.message);
+    return res.status(500).json({ error: "Voice search failed." });
+  }
+});
+
+
 // ✅ MongoDB Connection
 const uri = process.env.MONGODB_URI;
 
@@ -21,8 +105,8 @@ const client = new MongoClient(uri, {
 
 // ✅ Razorpay Setup
 const razorpay = new Razorpay({
-  key_id: "rzp_test_RZKcgEwKycMyd3", // Razorpay test key
-  key_secret: "rrTEZiPs6IU1s8Tmt72Z6YqI", // Razorpay test secret
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
 // ✅ Root Test API

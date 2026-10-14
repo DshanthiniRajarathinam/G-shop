@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/cartSlice";
-import axios from "axios";
+
 
 
 import img9 from '../assests/images-removebg-preview.png';
@@ -117,42 +117,34 @@ const Bestsale = () => {
     setTimeout(() => mediaRecorder.stop(), 5000);
   };
 
-  const sendToAssemblyAI = async (file) => {
-    try {
-      // 1. Upload
-      const uploadRes = await axios.post("https://api.assemblyai.com/v2/upload", file, {
-        headers: { authorization: "bc897ff170b24c148eaaf6c00e87915e", "content-type": file.type },
-      });
-      const audioUrl = uploadRes.data.upload_url;
+  
+const sendToAssemblyAI = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("audio", file);
 
-      // 2. Transcribe
-      const transcriptRes = await axios.post(
-        "https://api.assemblyai.com/v2/transcript",
-        { audio_url: audioUrl },
-        { headers: { authorization: "bc897ff170b24c148eaaf6c00e87915e" } }
-      );
-
-      const transcriptId = transcriptRes.data.id;
-      let transcriptText = "";
-
-      // 3. Polling
-      while (!transcriptText) {
-        const res = await axios.get(
-          `https://api.assemblyai.com/v2/transcript/${transcriptId}`,
-          { headers: { authorization: "bc897ff170b24c148eaaf6c00e87915e" } }
-        );
-
-        if (res.data.status === "completed") transcriptText = res.data.text;
-        else if (res.data.status === "failed") throw new Error("Transcription failed");
-        else await new Promise((r) => setTimeout(r, 2000));
+    const response = await fetch(
+      "https://g-shop-backend-atpy.onrender.com/api/voice-search",
+      {
+        method: "POST",
+        body: formData,
       }
+    );
 
-      setSearchTerm(transcriptText);
-    } catch (err) {
-      console.error(err);
-      setRecording(false);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Voice search failed");
     }
-  };
+
+    setSearchTerm(data.text || "");
+  } catch (error) {
+    console.error("Voice search error:", error);
+    alert("Voice search failed. Please try again.");
+  } finally {
+    setRecording(false);
+  }
+};
 
   return (
     <div className="bestsale container-fluid py-4" style={{ backgroundColor: "#f6fdf7", minHeight: "100vh" }}>
