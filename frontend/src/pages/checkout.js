@@ -16,7 +16,7 @@ const Checkout = () => {
 
     try {
       // ✅ Create order from backend
-      const res = await fetch("http://localhost:6005/api/create-order", {
+      const res = await fetch("https://g-shop-backend-atpy.onrender.com/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: 100 }), // ₹100
@@ -33,7 +33,7 @@ const Checkout = () => {
 
       // ✅ Razorpay payment options
       const options = {
-        key: "rzp_test_RZKcgEwKycMyd3", // your key_id
+        key: process.env.REACT_APP_RAZORPAY_KEY_ID, // your key_id
         amount: orderData.amount,
         currency: orderData.currency,
         name: "Gshop",
