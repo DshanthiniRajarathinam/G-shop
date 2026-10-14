@@ -1,17 +1,18 @@
 const express = require("express");
+require("dotenv").config();
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const Razorpay = require("razorpay");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
 const app = express();
-const port = 6005;
+const port = process.env.PORT || 6005;
 
 app.use(cors());
 app.use(express.json());
 
 // ✅ MongoDB Connection
-const uri = "mongodb+srv://dshanthini:dsha2006@cluster0.nitvbb2.mongodb.net/?appName=Cluster0";
+const uri = process.env.MONGODB_URI;
 
 
 const client = new MongoClient(uri, {
