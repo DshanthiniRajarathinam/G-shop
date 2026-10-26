@@ -8,7 +8,7 @@ const Register = () => {
         path="/register"
         routing="path"
         signInUrl="/login"
-        afterSignUpUrl="/profile"
+        afterSignUpUrl="/bestsale"
       />
     </div>
   );

@@ -1,69 +1,103 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Promotion = () => {
+  const [copiedCode, setCopiedCode] = useState(null);
+
   const promotions = [
-    { icon: "🔥", title: "20% Off on Fresh Fruits", desc: "Get the juiciest apples, bananas, and more at a discounted price.", code: "FRUIT20" },
-    { icon: "📦", title: "Free Delivery", desc: "On all orders over ₹499. Save on shipping costs now!", code: "Auto Applied" },
-    { icon: "🥦", title: "Veggie Combos", desc: "Buy mixed vegetables combo and save ₹50 instantly.", code: "VEG50" },
-    { icon: "💳", title: "Pay with UPI", desc: "Pay using UPI and get 10% cashback up to ₹100.", code: "PAYUPI" },
-    { icon: "🎁", title: "Invite & Earn", desc: "Refer friends and earn ₹100 grocery credits on each sign-up.", code: "No Code Needed" },
-    { icon: "⏳", title: "Flash Sale: Today Only", desc: "Flat 25% off on all snacks and beverages. Hurry!", code: "SNACK25" }
+    { icon: "🍎", title: "Flat 20% Off on Fruits", desc: "Enjoy delicious farm-picked strawberries, mangoes and crisp apples.", code: "FRUIT20", tag: "Seasonal Deal" },
+    { icon: "⚡", title: "Free 15-Min Delivery", desc: "Available on all grocery orders over ₹499. No hidden charges.", code: "FREEDEL", tag: "Express" },
+    { icon: "🥦", title: "Veggie Combos Special", desc: "Buy mixed kitchen vegetable bundle and save ₹50 instantly.", code: "VEG50", tag: "Combo Pack" },
+    { icon: "💳", title: "10% UPI Cashback", desc: "Pay with any UPI app (GPay/PhonePe/Paytm) & get instant cashback.", code: "UPISAVE", tag: "Payment Offer" },
+    { icon: "🎁", title: "Invite Neighbours & Friends", desc: "Share your grocery link and earn ₹100 credit on their first order.", code: "REFER100", tag: "Referral" },
+    { icon: "🥜", title: "25% Off Dry Fruits", desc: "Crunchy California almonds, hazelnuts and nuts at wholesale prices.", code: "NUTS25", tag: "Flash Sale" }
   ];
 
-  // Inline card style
-  const cardStyle = {
-    transition: "transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease",
-    cursor: "pointer"
-  };
-
-  const handleHover = (e, enter) => {
-    if (enter) {
-      e.currentTarget.style.transform = "translateY(-6px)";
-      e.currentTarget.style.boxShadow = "0 1rem 1.5rem rgba(0,0,0,0.15)";
-      e.currentTarget.style.backgroundColor = "#f1fdf7";
-    } else {
-      e.currentTarget.style.transform = "translateY(0)";
-      e.currentTarget.style.boxShadow = "0 .125rem .25rem rgba(0,0,0,.075)";
-      e.currentTarget.style.backgroundColor = "white";
-    }
+  const handleCopy = (code) => {
+    navigator.clipboard.writeText(code);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(null), 2500);
   };
 
   return (
-    <div>
-      {/* Header */}
-      <div className="bg-success text-white text-center py-5">
-        <h1 className="fw-bold">🎉 Special Grocery Promotions</h1>
-        <p className="lead">Don’t miss out on our latest discounts and deals!</p>
-      </div>
+    <div className="promotions-page" style={{ backgroundColor: "#f8fafc", minHeight: "85vh" }}>
+      
+      {/* Hero Header */}
+      <section 
+        className="text-white text-center py-5 mb-5" 
+        style={{ background: "linear-gradient(135deg, #065f46 0%, #059669 50%, #10b981 100%)" }}
+      >
+        <div className="container">
+          <span className="badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill mb-2">
+            🏷️ EXCLUSIVE OFFERS & DEALS
+          </span>
+          <h1 className="fw-bold display-5 mb-2">Grocery Discounts & Coupons</h1>
+          <p className="text-white-50 mb-0">
+            Apply these coupon codes at checkout to unlock instant discounts and free deliveries.
+          </p>
+        </div>
+      </section>
 
-      {/* Cards */}
-      <div className="container py-5">
+      {/* Promotion Cards */}
+      <div className="container pb-5">
         <div className="row g-4">
           {promotions.map((promo, idx) => (
-            <div className="col-md-4" key={idx}>
-              <div
-                className="card p-4 border-0 shadow-sm text-center h-100"
-                style={cardStyle}
-                onMouseEnter={(e) => handleHover(e, true)}
-                onMouseLeave={(e) => handleHover(e, false)}
-              >
-                <h5 className="text-success fw-bold">{promo.icon} {promo.title}</h5>
-                <p>{promo.desc}</p>
-                <span className="badge bg-success-subtle text-success px-3 py-2 mt-2">
-                  {promo.code === "Auto Applied" || promo.code === "No Code Needed"
-                    ? promo.code
-                    : <>Use Code: <strong>{promo.code}</strong></>}
-                </span>
+            <div className="col-12 col-md-6 col-lg-4" key={idx}>
+              <div className="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white position-relative" style={{ transition: "all 0.3s ease" }}>
+                
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <span className="fs-1">{promo.icon}</span>
+                  <span className="badge bg-success-subtle text-success rounded-pill px-3 py-1 fw-bold">
+                    {promo.tag}
+                  </span>
+                </div>
+
+                <h5 className="fw-bold text-dark mb-2">{promo.title}</h5>
+                <p className="text-muted small mb-4">{promo.desc}</p>
+
+                <div className="mt-auto pt-2">
+                  <div 
+                    className="p-2 rounded-3 d-flex align-items-center justify-content-between"
+                    style={{ backgroundColor: "#f1fdf7", border: "1px dashed #10b981", cursor: "pointer" }}
+                    onClick={() => handleCopy(promo.code)}
+                    title="Click to copy coupon code"
+                  >
+                    <span className="fw-bold font-monospace text-success ms-2">
+                      {promo.code}
+                    </span>
+                    <button 
+                      className="btn btn-sm btn-success rounded-pill px-3 py-1"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCopy(promo.code);
+                      }}
+                    >
+                      {copiedCode === promo.code ? "Copied! ✓" : "Copy Code"}
+                    </button>
+                  </div>
+                </div>
+
               </div>
             </div>
           ))}
         </div>
 
-        {/* CTA */}
+        {/* CTA Banner */}
         <div className="text-center mt-5">
-          <Link to="/bestsale" className="btn btn-success btn-lg px-4">Start Shopping</Link>
+          <div className="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white text-center mx-auto" style={{ maxWidth: "700px" }}>
+            <h3 className="fw-bold mb-2">Ready to save on fresh groceries?</h3>
+            <p className="text-muted mb-4">Start adding your favorite fruits and vegetables now!</p>
+            <div className="d-flex justify-content-center gap-3">
+              <Link to="/bestsale" className="btn btn-success btn-lg rounded-pill px-4 fw-bold">
+                Start Shopping
+              </Link>
+              <Link to="/fruits" className="btn btn-outline-success btn-lg rounded-pill px-4 fw-bold">
+                Browse Fruits
+              </Link>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
   );

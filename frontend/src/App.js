@@ -16,6 +16,7 @@ import Checkout from './pages/checkout';
 import FruitsPage from './pages/fruitspage';
 import VegetablesPage from './pages/vegetablespage';
 import PaymentSuccess from './pages/PaymentSuccess'; 
+import ProtectedRoute from './components/ProtectedRoute';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -25,21 +26,72 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
+          {/* Public Routes */}
           <Route path='/' element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/bestsale" element={<Bestsale />} />
+          <Route path="/resetpassword" element={<ResetPassword />} />
           <Route path="/promotion" element={<Promotion />} />
           <Route path="/service" element={<Service />} />
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/resetpassword" element={<ResetPassword />} />
-          <Route path="/cart" element={<CartPage />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/fruits" element={<FruitsPage />} />
-          <Route path="/vegetables" element={<VegetablesPage />} />
-          <Route path="/payment-success" element={<PaymentSuccess />} /> 
-          
+
+          {/* Protected Routes (Requires Login / Register via Clerk) */}
+          <Route 
+            path="/bestsale" 
+            element={
+              <ProtectedRoute>
+                <Bestsale />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/fruits" 
+            element={
+              <ProtectedRoute>
+                <FruitsPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/vegetables" 
+            element={
+              <ProtectedRoute>
+                <VegetablesPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/cart" 
+            element={
+              <ProtectedRoute>
+                <CartPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/checkout" 
+            element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <UserProfile />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/payment-success" 
+            element={
+              <ProtectedRoute>
+                <PaymentSuccess />
+              </ProtectedRoute>
+            } 
+          /> 
         </Routes>
         <Footer />
       </BrowserRouter>

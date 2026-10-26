@@ -6,94 +6,91 @@ const PaymentSuccess = () => {
 
   return (
     <div
-      className="d-flex flex-column justify-content-center align-items-center text-center"
+      className="d-flex flex-column justify-content-center align-items-center text-center px-3"
       style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #a8edea, #fed6e3)",
+        minHeight: "85vh",
+        background: "linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)",
         overflow: "hidden",
-        animation: "fadeIn 1s ease-in-out",
+        animation: "fadeIn 0.8s ease-in-out",
       }}
     >
-      {/* ✅ Success Circle with Animation */}
+      {/* Success Circle with Animation */}
       <div
         style={{
-          width: "140px",
-          height: "140px",
+          width: "120px",
+          height: "120px",
           borderRadius: "50%",
-          background: "linear-gradient(145deg, #00c853, #b2ff59)",
+          background: "linear-gradient(135deg, #10b981, #059669)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          boxShadow: "0 0 25px rgba(0, 200, 83, 0.6)",
-          animation: "pop 0.6s ease-out",
+          boxShadow: "0 10px 30px rgba(16, 185, 129, 0.4)",
+          animation: "pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
         }}
       >
         <i
-          className="bi bi-check2-circle"
+          className="bi bi-check2"
           style={{
-            fontSize: "80px",
+            fontSize: "65px",
             color: "white",
-            textShadow: "0 0 10px rgba(255,255,255,0.8)",
+            fontWeight: "bold",
           }}
         ></i>
       </div>
 
-      {/* ✅ Animated Heading */}
+      {/* Animated Heading */}
       <h1
         className="fw-bold mt-4"
         style={{
-          fontSize: "2.5rem",
-          color: "#0d6efd",
-          letterSpacing: "1px",
-          animation: "slideDown 1s ease-in-out",
+          fontSize: "2.3rem",
+          color: "#065f46",
+          letterSpacing: "-0.5px",
+          animation: "slideDown 0.8s ease-in-out",
         }}
       >
-        Payment Successful 🎉
+        Order Placed Successfully! 🎉
       </h1>
 
-      {/* ✅ Subtitle */}
+      {/* Subtitle */}
       <p
+        className="text-secondary"
         style={{
-          color: "#333",
-          fontSize: "1.1rem",
-          maxWidth: "500px",
+          fontSize: "1.05rem",
+          maxWidth: "520px",
           marginTop: "10px",
-          animation: "fadeIn 1.5s ease-in-out",
+          lineHeight: "1.6",
         }}
       >
-        Thank you for shopping with <strong>GShop</strong>. Your order has been
-        placed successfully and will be delivered soon.
+        Thank you for shopping with <strong>G-Shop</strong>. Our packaging team is packing your fresh produce now.
       </p>
 
-      {/* ✅ Back Button */}
+      {/* 15-Min Delivery Badge */}
+      <div 
+        className="bg-white px-4 py-2 rounded-pill shadow-sm d-flex align-items-center gap-2 my-2 border border-success-subtle"
+      >
+        <span className="fs-5">⚡</span>
+        <span className="fw-bold text-success small">Estimated Delivery: 15 Minutes</span>
+      </div>
+
+      {/* Back Button */}
       <button
         onClick={() => navigate("/")}
-        className="btn fw-semibold mt-4"
+        className="btn btn-success fw-bold mt-4 rounded-pill px-5 py-3 shadow"
         style={{
-          background: "linear-gradient(90deg, #007bff, #00c6ff)",
-          color: "white",
-          padding: "10px 35px",
-          borderRadius: "30px",
+          background: "linear-gradient(135deg, #10b981, #047857)",
           border: "none",
-          boxShadow: "0 4px 15px rgba(0, 123, 255, 0.3)",
           transition: "all 0.3s ease",
         }}
-        onMouseEnter={(e) =>
-          (e.target.style.boxShadow = "0 6px 25px rgba(0, 123, 255, 0.5)")
-        }
-        onMouseLeave={(e) =>
-          (e.target.style.boxShadow = "0 4px 15px rgba(0, 123, 255, 0.3)")
-        }
       >
-        🏠 Back to Home
+        🏠 Back to Home & Explore More
       </button>
 
-      {/* ✅ Small Note */}
-      <p className="mt-4 text-muted" style={{ fontSize: "0.9rem" }}>
-        A confirmation email has been sent to your registered email address.
+      {/* Small Note */}
+      <p className="mt-4 text-muted small">
+        Order confirmation and live GPS delivery link sent to your registered contact.
       </p>
 
-      {/* ✅ CSS Animations */}
+      {/* CSS Animations */}
       <style>
         {`
           @keyframes fadeIn {
@@ -103,12 +100,12 @@ const PaymentSuccess = () => {
 
           @keyframes pop {
             0% { transform: scale(0); opacity: 0; }
-            80% { transform: scale(1.1); opacity: 1; }
+            80% { transform: scale(1.15); opacity: 1; }
             100% { transform: scale(1); }
           }
 
           @keyframes slideDown {
-            from { transform: translateY(-30px); opacity: 0; }
+            from { transform: translateY(-20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
           }
         `}
