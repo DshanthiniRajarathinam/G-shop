@@ -13,12 +13,10 @@ import ResetPassword from './pages/resetpassword';
 import CartPage from './pages/cart';
 import Contact from './pages/contact';
 import Checkout from './pages/checkout';
-import FruitsPage from './pages/fruitspage';
-import VegetablesPage from './pages/vegetablespage';
 import PaymentSuccess from './pages/PaymentSuccess'; 
 import ProtectedRoute from './components/ProtectedRoute';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
   return (
@@ -45,21 +43,25 @@ function App() {
             } 
           />
           <Route 
-            path="/fruits" 
+            path="/products" 
             element={
               <ProtectedRoute>
-                <FruitsPage />
+                <Bestsale />
               </ProtectedRoute>
             } 
           />
-          <Route 
-            path="/vegetables" 
-            element={
-              <ProtectedRoute>
-                <VegetablesPage />
-              </ProtectedRoute>
-            } 
-          />
+          <Route path="/fruits" element={<Navigate to="/bestsale?category=Fruits" replace />} />
+          <Route path="/vegetables" element={<Navigate to="/bestsale?category=Vegetables" replace />} />
+          <Route path="/dryfruits" element={<Navigate to="/bestsale?category=Dry Fruits" replace />} />
+          <Route path="/beverages" element={<Navigate to="/bestsale?category=Cold Beverages" replace />} />
+          <Route path="/flours" element={<Navigate to="/bestsale?category=Flours" replace />} />
+          <Route path="/flour" element={<Navigate to="/bestsale?category=Flours" replace />} />
+          <Route path="/chocolates" element={<Navigate to="/bestsale?category=Chocolates" replace />} />
+          <Route path="/chocolate" element={<Navigate to="/bestsale?category=Chocolates" replace />} />
+          <Route path="/snacks" element={<Navigate to="/bestsale?category=Snacks" replace />} />
+          <Route path="/snack" element={<Navigate to="/bestsale?category=Snacks" replace />} />
+          <Route path="/spices" element={<Navigate to="/bestsale?category=Spices" replace />} />
+          <Route path="/spice" element={<Navigate to="/bestsale?category=Spices" replace />} />
           <Route 
             path="/cart" 
             element={

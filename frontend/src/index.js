@@ -11,12 +11,18 @@ import store from './redux/store';
 
 import { ClerkProvider } from '@clerk/clerk-react';
 
-const clerkKey = "pk_test_Y2hhcm1pbmctY2ljYWRhLTMyLmNsZXJrLmFjY291bnRzLmRldiQ"; // 👈 from Clerk dashboard
+const clerkKey =
+  process.env.REACT_APP_CLERK_PUBLISHABLE_KEY ||
+  process.env.REACT_APP_CLERK_FRONTEND_API ||
+  "pk_test_Y2hhcm1pbmctY2ljYWRhLTMyLmNsZXJrLmFjY291bnRzLmRldiQ";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ClerkProvider publishableKey={clerkKey}>
+    <ClerkProvider
+      publishableKey={clerkKey}
+      clerkJSUrl="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+    >
       <Provider store={store}>
         <App />
       </Provider>

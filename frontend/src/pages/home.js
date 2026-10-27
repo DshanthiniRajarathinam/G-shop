@@ -8,10 +8,14 @@ import { addToCart } from '../redux/cartSlice';
 import almondImg from '../assests/almond-removebg-preview.png';
 import vegetableImg from '../assests/fruitbas-removebg-preview.png';
 import beverageImg from '../assests/soft-drinks-removebg-preview.png';
+import flourIcon from '../assests/atta-flour.png';
+import chocoIcon from '../assests/dark-chocolate.jpg';
+import snackIcon from '../assests/potato-chips.jpg';
+import spiceIcon from '../assests/turmeric.png';
 import deliveryImg from '../assests/delivery-removebg-preview.png';
-import slide1 from '../assests/slideone.jpg';
-import slide2 from '../assests/secondsilde2.jpg';
-import slide3 from '../assests/slidethird.jpg';
+import slide1 from '../assests/s22.jpg';
+import slide2 from '../assests/s33.jpg';
+import slide3 from '../assests/s44.jpg';
 
 // Featured product images
 import strawberryImg from '../assests/images-removebg-preview.png';
@@ -108,7 +112,7 @@ const Home = () => {
       image: carrotImg
     },
     {
-      id: 101,
+      id: 17,
       title: "California Almonds",
       category: "Dry Fruits",
       price: 180,
@@ -118,6 +122,18 @@ const Home = () => {
       reviews: 420,
       description: "Crunchy premium almonds, perfect for daily energy and vitality.",
       image: almondImg
+    },
+    {
+      id: 25,
+      title: "Chilled Cola Can",
+      category: "Beverages",
+      price: 40,
+      oldPrice: 50,
+      discount: "20% OFF",
+      rating: 4.8,
+      reviews: 265,
+      description: "Classic refreshing fizzy cola, served ice cold with crisp carbonation.",
+      image: beverageImg
     }
   ];
 
@@ -249,7 +265,7 @@ const Home = () => {
                           strawberries carefully checked for guaranteed sweetness.
                         </p>
                         <div className="d-flex flex-wrap gap-3">
-                          <Link to="/fruits" className="hero-cta-btn">
+                          <Link to="/bestsale?category=Fruits" className="hero-cta-btn">
                             <i className="bi bi-apple"></i>
                             <span>Explore Fruits</span>
                           </Link>
@@ -294,7 +310,7 @@ const Home = () => {
                           crispy carrots and wholesome premium California almonds.
                         </p>
                         <div className="d-flex flex-wrap gap-3">
-                          <Link to="/vegetables" className="hero-cta-btn">
+                          <Link to="/bestsale?category=Vegetables" className="hero-cta-btn">
                             <i className="bi bi-flower1"></i>
                             <span>Shop Vegetables</span>
                           </Link>
@@ -404,46 +420,82 @@ const Home = () => {
 
         <div className="row g-4">
           <div className="col-6 col-md-3">
-            <Link to="/fruits" className="category-card">
+            <Link to="/bestsale?category=Fruits" className="category-card">
               <div className="category-icon-bubble" style={{ backgroundColor: "#fef2f2" }}>
                 <img src={strawberryImg} alt="Fresh Fruits" />
               </div>
               <h5 className="category-title">Fresh Fruits</h5>
               <span className="category-subtitle">Apples, Berries & Citrus</span>
-              <span className="badge bg-danger-subtle text-danger rounded-pill mt-2">Up to 25% Off</span>
             </Link>
           </div>
 
           <div className="col-6 col-md-3">
-            <Link to="/vegetables" className="category-card">
+            <Link to="/bestsale?category=Vegetables" className="category-card">
               <div className="category-icon-bubble" style={{ backgroundColor: "#f0fdf4" }}>
                 <img src={vegetableImg} alt="Vegetables" />
               </div>
               <h5 className="category-title">Fresh Vegetables</h5>
               <span className="category-subtitle">Tomatoes, Greens & Root</span>
-              <span className="badge bg-success-subtle text-success rounded-pill mt-2">Farm Harvest</span>
             </Link>
           </div>
 
           <div className="col-6 col-md-3">
-            <Link to="/bestsale" className="category-card">
+            <Link to="/bestsale?category=Dry Fruits" className="category-card">
               <div className="category-icon-bubble" style={{ backgroundColor: "#fffbeb" }}>
                 <img src={almondImg} alt="Nuts & Dry Fruits" />
               </div>
               <h5 className="category-title">Nuts & Dry Fruits</h5>
               <span className="category-subtitle">Almonds, Cashews & Seeds</span>
-              <span className="badge bg-warning-subtle text-warning-emphasis rounded-pill mt-2">Energy Boost</span>
             </Link>
           </div>
 
           <div className="col-6 col-md-3">
-            <Link to="/bestsale" className="category-card">
+            <Link to="/bestsale?category=Cold Beverages" className="category-card">
               <div className="category-icon-bubble" style={{ backgroundColor: "#eff6ff" }}>
                 <img src={beverageImg} alt="Beverages" />
               </div>
               <h5 className="category-title">Cold Beverages</h5>
               <span className="category-subtitle">Juices, Sodas & Water</span>
-              <span className="badge bg-primary-subtle text-primary rounded-pill mt-2">Refreshing</span>
+            </Link>
+          </div>
+
+          <div className="col-6 col-md-3">
+            <Link to="/bestsale?category=Flours" className="category-card">
+              <div className="category-icon-bubble" style={{ backgroundColor: "#fefce8" }}>
+                <img src={flourIcon} alt="Flours & Grains" />
+              </div>
+              <h5 className="category-title">Flours & Grains</h5>
+              <span className="category-subtitle">Atta, Besan & Ragi</span>
+            </Link>
+          </div>
+
+          <div className="col-6 col-md-3">
+            <Link to="/bestsale?category=Chocolates" className="category-card">
+              <div className="category-icon-bubble" style={{ backgroundColor: "#faf5ff" }}>
+                <img src={chocoIcon} alt="Chocolates & Sweets" />
+              </div>
+              <h5 className="category-title">Chocolates</h5>
+              <span className="category-subtitle">Dark, Milk & Truffles</span>
+            </Link>
+          </div>
+
+          <div className="col-6 col-md-3">
+            <Link to="/bestsale?category=Snacks" className="category-card">
+              <div className="category-icon-bubble" style={{ backgroundColor: "#fff7ed" }}>
+                <img src={snackIcon} alt="Snacks & Munchies" />
+              </div>
+              <h5 className="category-title">Snacks & Munchies</h5>
+              <span className="category-subtitle">Chips, Makhana & Namkeen</span>
+            </Link>
+          </div>
+
+          <div className="col-6 col-md-3">
+            <Link to="/bestsale?category=Spices" className="category-card">
+              <div className="category-icon-bubble" style={{ backgroundColor: "#fff1f2" }}>
+                <img src={spiceIcon} alt="Spices & Masalas" />
+              </div>
+              <h5 className="category-title">Spices & Masalas</h5>
+              <span className="category-subtitle">Turmeric, Chilli & Garam Masala</span>
             </Link>
           </div>
         </div>

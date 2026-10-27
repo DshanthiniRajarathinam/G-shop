@@ -81,8 +81,10 @@ const CartPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {cartItems.map((item) => (
-                        <tr key={item.id} style={{ borderBottom: "1px solid #f8fafc" }}>
+                      {cartItems.map((item) => {
+                        const itemKey = item.cartKey || item.id;
+                        return (
+                        <tr key={itemKey} style={{ borderBottom: "1px solid #f8fafc" }}>
                           
                           {/* Product Info */}
                           <td>
@@ -99,16 +101,23 @@ const CartPage = () => {
                               </div>
                               <div>
                                 <h6 className="fw-bold mb-1 text-dark">{item.title || item.name}</h6>
-                                <span className="badge bg-success-subtle text-success rounded-pill small" style={{ fontSize: "0.7rem" }}>
-                                  Fresh Harvest
-                                </span>
+                                <div className="d-flex align-items-center gap-1 flex-wrap">
+                                  <span className="badge bg-success-subtle text-success rounded-pill small" style={{ fontSize: "0.7rem" }}>
+                                    {item.category || "Fresh Harvest"}
+                                  </span>
+                                  {item.unit && (
+                                    <span className="badge bg-primary-subtle text-primary rounded-pill small fw-bold" style={{ fontSize: "0.72rem" }}>
+                                      Unit: {item.unit}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </td>
 
                           {/* Unit Price */}
                           <td className="text-center fw-semibold text-secondary">
-                            ₹{item.price}/Kg
+                            ₹{item.price} <span className="small text-muted">/ {item.unit || "unit"}</span>
                           </td>
 
                           {/* Quantity Controls */}
@@ -116,7 +125,7 @@ const CartPage = () => {
                             <div className="d-inline-flex align-items-center gap-2 bg-light p-1 rounded-pill border">
                               <button
                                 className="grocery-qty-btn"
-                                onClick={() => handleQuantityChange(item.id, "decrement")}
+                                onClick={() => handleQuantityChange(itemKey, "decrement")}
                                 disabled={item.quantity <= 1}
                                 title="Decrease"
                               >
@@ -125,7 +134,7 @@ const CartPage = () => {
                               <span className="fw-bold px-2">{item.quantity}</span>
                               <button
                                 className="grocery-qty-btn"
-                                onClick={() => handleQuantityChange(item.id, "increment")}
+                                onClick={() => handleQuantityChange(itemKey, "increment")}
                                 title="Increase"
                               >
                                 +
@@ -142,7 +151,7 @@ const CartPage = () => {
                           <td className="text-end">
                             <button
                               className="btn btn-sm btn-outline-danger rounded-circle p-2"
-                              onClick={() => handleRemove(item.id)}
+                              onClick={() => handleRemove(itemKey)}
                               title="Remove item"
                             >
                               <i className="bi bi-trash3-fill"></i>
@@ -150,7 +159,8 @@ const CartPage = () => {
                           </td>
 
                         </tr>
-                      ))}
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>

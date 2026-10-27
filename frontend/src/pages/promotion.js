@@ -91,7 +91,7 @@ const Promotion = () => {
               <Link to="/bestsale" className="btn btn-success btn-lg rounded-pill px-4 fw-bold">
                 Start Shopping
               </Link>
-              <Link to="/fruits" className="btn btn-outline-success btn-lg rounded-pill px-4 fw-bold">
+              <Link to="/bestsale?category=Fruits" className="btn btn-outline-success btn-lg rounded-pill px-4 fw-bold">
                 Browse Fruits
               </Link>
             </div>

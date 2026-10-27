@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,42 +11,78 @@ const Header = () => {
   const cartItems = useSelector((state) => state.cart.cartItems || []);
   const totalCartCount = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
 
+  const [searchParams] = useSearchParams();
+  const currentCategory = searchParams.get("category") || "";
+
   const handleCategoryChange = (e) => {
     const category = e.target.value;
-    if (category) {
-      navigate(`/${category}`);
+    if (!category || category === "All") {
+      navigate('/bestsale');
+    } else if (category === "promotion") {
+      navigate('/promotion');
+    } else {
+      navigate(`/bestsale?category=${encodeURIComponent(category)}`);
     }
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
+    const params = new URLSearchParams();
     if (searchTerm.trim()) {
-      navigate(`/bestsale?query=${encodeURIComponent(searchTerm.trim())}`);
-    } else {
-      navigate('/bestsale');
+      params.set("query", searchTerm.trim());
     }
+    if (currentCategory && currentCategory !== "All") {
+      params.set("category", currentCategory);
+    }
+    const qs = params.toString();
+    navigate(qs ? `/bestsale?${qs}` : '/bestsale');
   };
 
   return (
     <>
-      {/* Top Announcement Bar */}
-      <div className="top-notice-bar d-none d-md-block">
-        <div className="container-fluid px-lg-5 d-flex justify-content-between align-items-center">
-          <div className="d-flex align-items-center gap-3">
-            <span className="badge-live">⚡ EXPRESS</span>
-            <span>Fast 15-Minute Grocery Delivery to your doorstep!</span>
-            <span className="text-white-50">|</span>
-            <span className="text-white-50">100% Organic & Farm Fresh Guarantee</span>
-          </div>
-          <div className="d-flex align-items-center gap-4">
-            <span className="d-flex align-items-center gap-1">
-              <i className="bi bi-geo-alt-fill text-warning"></i>
-              <span>Deliver to: <strong>Chennai, 600001</strong></span>
-            </span>
-            <span className="d-flex align-items-center gap-1">
-              <i className="bi bi-telephone-fill"></i>
-              <span>+91 98765 43210</span>
-            </span>
+      {/* Top Running Announcement Screen Bar */}
+      <div className="top-notice-bar" title="Hover to pause">
+        <div className="marquee-wrapper">
+          <div className="marquee-content">
+            
+            {/* Running Text Track 1 */}
+            <div className="marquee-group">
+              <span className="badge-live">⚡ EXPRESS</span>
+              <span className="fw-bold">Fast 15-Minute Grocery Delivery to your doorstep!</span>
+              <span className="marquee-divider">|</span>
+              <span className="fw-semibold">🌿 100% Organic & Farm Fresh Guarantee</span>
+              <span className="marquee-divider">|</span>
+              <span className="badge-live">⚡ EXPRESS</span>
+              <span className="fw-bold">Fast 15-Minute Grocery Delivery to your doorstep!</span>
+              <span className="marquee-divider">|</span>
+              <span className="fw-semibold">🌿 100% Organic & Farm Fresh Guarantee</span>
+              <span className="marquee-divider">|</span>
+              <span className="badge-live">⚡ EXPRESS</span>
+              <span className="fw-bold">Fast 15-Minute Grocery Delivery to your doorstep!</span>
+              <span className="marquee-divider">|</span>
+              <span className="fw-semibold">🌿 100% Organic & Farm Fresh Guarantee</span>
+              <span className="marquee-divider">|</span>
+            </div>
+
+            {/* Running Text Track 2 (Duplicate for Seamless Infinite Loop) */}
+            <div className="marquee-group" aria-hidden="true">
+              <span className="badge-live">⚡ EXPRESS</span>
+              <span className="fw-bold">Fast 15-Minute Grocery Delivery to your doorstep!</span>
+              <span className="marquee-divider">|</span>
+              <span className="fw-semibold">🌿 100% Organic & Farm Fresh Guarantee</span>
+              <span className="marquee-divider">|</span>
+              <span className="badge-live">⚡ EXPRESS</span>
+              <span className="fw-bold">Fast 15-Minute Grocery Delivery to your doorstep!</span>
+              <span className="marquee-divider">|</span>
+              <span className="fw-semibold">🌿 100% Organic & Farm Fresh Guarantee</span>
+              <span className="marquee-divider">|</span>
+              <span className="badge-live">⚡ EXPRESS</span>
+              <span className="fw-bold">Fast 15-Minute Grocery Delivery to your doorstep!</span>
+              <span className="marquee-divider">|</span>
+              <span className="fw-semibold">🌿 100% Organic & Farm Fresh Guarantee</span>
+              <span className="marquee-divider">|</span>
+            </div>
+
           </div>
         </div>
       </div>
@@ -79,29 +115,46 @@ const Header = () => {
 
             {/* Grocery Search Bar */}
             <div className="col-12 col-md flex-grow-1 order-3 order-md-2">
-              <form onSubmit={handleSearch} className="grocery-search-wrapper d-flex align-items-center">
+              <form onSubmit={handleSearch} className="grocery-search-wrapper">
                 <select 
                   className="grocery-search-select d-none d-sm-block" 
-                  defaultValue="" 
+                  value={currentCategory} 
                   onChange={handleCategoryChange}
                   aria-label="Select Category"
                 >
                   <option value="">All Categories</option>
-                  <option value="fruits">🍎 Fruits</option>
-                  <option value="vegetables">🥬 Vegetables</option>
-                  <option value="bestsale">⭐ All Products</option>
+                  <option value="Fruits">🍎 Fruits</option>
+                  <option value="Vegetables">🥬 Vegetables</option>
+                  <option value="Dry Fruits">🥜 Nuts & Dry Fruits</option>
+                  <option value="Cold Beverages">🥤 Cold Beverages</option>
+                  <option value="Flours">🌾 Flours & Grains</option>
+                  <option value="Chocolates">🍫 Chocolates & Sweets</option>
+                  <option value="Snacks">🍿 Snacks & Munchies</option>
+                  <option value="Spices">🌶️ Spices & Masalas</option>
                   <option value="promotion">🎁 Promotions</option>
                 </select>
-                <div className="d-flex align-items-center flex-grow-1 position-relative">
-                  <i className="bi bi-search text-muted ms-3"></i>
+
+                <div className="grocery-search-input-wrap">
+                  <i className="bi bi-search grocery-search-icon"></i>
                   <input
                     type="text"
-                    className="form-control grocery-search-input"
-                    placeholder="Search fresh vegetables, fruits, dry fruits..."
+                    className="grocery-search-input"
+                    placeholder="Search ..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
+                  {searchTerm && (
+                    <button
+                      type="button"
+                      className="grocery-search-clear-btn"
+                      onClick={() => setSearchTerm('')}
+                      title="Clear search"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
+
                 <button type="submit" className="grocery-search-btn">
                   <span>Search</span>
                 </button>
@@ -125,22 +178,22 @@ const Header = () => {
                   className="nav-link-grocery d-flex align-items-center gap-1"
                   title="Login with Clerk"
                 >
-                  <i className="bi bi-box-arrow-in-right fs-5 text-success"></i>
+                  <i className="bi bi-person-circle fs-5 text-success"></i>
                   <span>Login</span>
                 </Link>
               </SignedOut>
 
               <SignedIn>
-                <div className="d-flex align-items-center gap-2">
-                  <Link 
-                    to="/profile" 
-                    className="nav-link-grocery d-flex align-items-center gap-1"
-                    title="My Profile"
-                  >
-                    <i className="bi bi-person-circle fs-5 text-success"></i>
-                    <span className="d-none d-xl-inline">Profile</span>
-                  </Link>
-                  <UserButton afterSignOutUrl="/login" />
+                <div className="d-flex align-items-center ms-1" title="Account & Profile">
+                  <UserButton afterSignOutUrl="/login">
+                    <UserButton.MenuItems>
+                      <UserButton.Link
+                        label="My Profile"
+                        labelIcon={<i className="bi bi-person-circle text-success fs-6"></i>}
+                        href="/profile"
+                      />
+                    </UserButton.MenuItems>
+                  </UserButton>
                 </div>
               </SignedIn>
 

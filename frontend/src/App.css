@@ -95,17 +95,62 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   TOP NOTIFICATION BAR
+   TOP NOTIFICATION BAR (RUNNING SCREEN MARQUEE)
    -------------------------------------------------------------------------- */
+@keyframes topBarMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 .top-notice-bar {
-  background: linear-gradient(90deg, #065f46 0%, #10b981 50%, #065f46 100%);
+  background: linear-gradient(90deg, #064e3b 0%, #059669 25%, #10b981 50%, #059669 75%, #064e3b 100%);
   color: #ffffff;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   font-weight: 500;
-  padding: 8px 16px;
+  padding: 7px 0;
   position: relative;
   z-index: 1030;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
+.marquee-wrapper {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+.marquee-content {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  white-space: nowrap;
+  animation: topBarMarquee 32s linear infinite;
+  will-change: transform;
+}
+
+.marquee-wrapper:hover .marquee-content {
+  animation-play-state: paused;
+}
+
+.marquee-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 20px;
+  padding-right: 20px;
+}
+
+.marquee-divider {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 300;
+  margin: 0 4px;
+}
+
 .top-notice-bar .badge-live {
   background: #f97316;
   color: #fff;
@@ -114,6 +159,8 @@ body {
   font-size: 0.72rem;
   font-weight: 700;
   animation: pulseOrange 2s infinite;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* --------------------------------------------------------------------------
@@ -187,49 +234,104 @@ body {
   background: #ffffff;
   border: 2px solid #e2e8f0;
   border-radius: var(--g-radius-pill);
-  padding: 4px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  height: 48px;
+  padding: 3px 4px 3px 3px;
+  display: flex;
+  align-items: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  width: 100%;
 }
 .grocery-search-wrapper:focus-within {
-  border-color: var(--g-primary);
-  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18);
+  border-color: #10b981;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.16);
 }
 .grocery-search-select {
   border: none;
-  background: #f1f5f9;
+  border-right: 1px solid #e2e8f0;
+  background: #f8fafc;
   border-radius: var(--g-radius-pill) 0 0 var(--g-radius-pill);
-  font-size: 0.85rem;
+  font-size: 0.86rem;
   font-weight: 600;
   color: var(--g-dark-secondary);
-  padding: 8px 14px;
+  height: 100%;
+  padding: 0 14px;
   outline: none;
   cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+}
+.grocery-search-select:hover {
+  background-color: #f1f5f9;
+}
+.grocery-search-input-wrap {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  height: 100%;
+  padding: 0 12px;
+  background: transparent;
+  min-width: 0;
+}
+.grocery-search-icon {
+  color: #94a3b8;
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-right: 8px;
 }
 .grocery-search-input {
-  border: none;
-  outline: none;
-  font-size: 0.9rem;
-  padding: 6px 12px;
+  border: none !important;
+  outline: none !important;
   box-shadow: none !important;
+  background: transparent !important;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--g-dark);
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+}
+.grocery-search-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+.grocery-search-clear-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.grocery-search-clear-btn:hover {
+  color: #334155;
 }
 .grocery-search-btn {
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
   border: none;
   border-radius: var(--g-radius-pill);
-  padding: 8px 20px;
-  font-weight: 600;
-  font-size: 0.88rem;
+  height: 100%;
+  min-height: 40px;
+  padding: 0 24px;
+  font-weight: 700;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  flex-shrink: 0;
   transition: all 0.25s ease;
 }
 .grocery-search-btn:hover {
   background: linear-gradient(135deg, #059669, #047857);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .nav-link-grocery {
@@ -632,6 +734,33 @@ body {
   align-items: baseline;
   gap: 8px;
   margin-bottom: 14px;
+}
+.product-unit-selector {
+  margin-bottom: 12px;
+}
+.unit-selector-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.unit-select-dropdown {
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1e293b;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.unit-select-dropdown:hover, .unit-select-dropdown:focus {
+  border-color: #10b981;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
 }
 .product-price-current {
   font-size: 1.35rem;

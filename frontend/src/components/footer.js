@@ -97,10 +97,14 @@ const Footer = () => {
           <div className="col-lg-2 col-6">
             <h6 className="text-white fw-bold text-uppercase mb-3 small tracking-wider">Categories</h6>
             <ul className="list-unstyled mb-0">
-              <li><Link to="/fruits" className="footer-link">🍎 Fresh Fruits</Link></li>
-              <li><Link to="/vegetables" className="footer-link">🥬 Farm Vegetables</Link></li>
-              <li><Link to="/bestsale" className="footer-link">🥜 Nuts & Seeds</Link></li>
-              <li><Link to="/bestsale" className="footer-link">🥤 Cold Beverages</Link></li>
+              <li><Link to="/bestsale?category=Fruits" className="footer-link">🍎 Fresh Fruits</Link></li>
+              <li><Link to="/bestsale?category=Vegetables" className="footer-link">🥬 Farm Vegetables</Link></li>
+              <li><Link to="/bestsale?category=Dry Fruits" className="footer-link">🥜 Nuts & Dry Fruits</Link></li>
+              <li><Link to="/bestsale?category=Cold Beverages" className="footer-link">🥤 Cold Beverages</Link></li>
+              <li><Link to="/bestsale?category=Flours" className="footer-link">🌾 Flours & Grains</Link></li>
+              <li><Link to="/bestsale?category=Chocolates" className="footer-link">🍫 Chocolates & Sweets</Link></li>
+              <li><Link to="/bestsale?category=Snacks" className="footer-link">🍿 Snacks & Munchies</Link></li>
+              <li><Link to="/bestsale?category=Spices" className="footer-link">🌶️ Spices & Masalas</Link></li>
               <li><Link to="/promotion" className="footer-link">🏷️ Daily Combos</Link></li>
             </ul>
           </div>

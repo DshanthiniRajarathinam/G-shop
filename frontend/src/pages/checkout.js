@@ -209,7 +209,7 @@ const Checkout = () => {
               {cartItems.length > 0 ? (
                 <div className="mb-3" style={{ maxHeight: "220px", overflowY: "auto" }}>
                   {cartItems.map((item) => (
-                    <div key={item.id} className="d-flex align-items-center justify-content-between py-2 border-bottom">
+                    <div key={item.cartKey || item.id} className="d-flex align-items-center justify-content-between py-2 border-bottom">
                       <div className="d-flex align-items-center gap-2">
                         <img 
                           src={item.image} 
@@ -218,7 +218,9 @@ const Checkout = () => {
                         />
                         <div>
                           <div className="fw-semibold small text-dark">{item.title || item.name}</div>
-                          <div className="text-muted" style={{ fontSize: "0.75rem" }}>Qty: {item.quantity}</div>
+                          <div className="text-muted" style={{ fontSize: "0.75rem" }}>
+                            Qty: {item.quantity} {item.unit ? `• Pack: ${item.unit}` : ''}
+                          </div>
                         </div>
                       </div>
                       <span className="fw-bold text-success small">
