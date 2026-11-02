@@ -14,7 +14,7 @@ function ResetPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
-
+    
     try {
       const response = await fetch('http://localhost:6005/reset-password', {
         method: 'PUT',

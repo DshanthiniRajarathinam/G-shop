@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useUser } from '@clerk/clerk-react';
 import { addToCart } from '../redux/cartSlice';
+import SmartCategoryDropdown from '../components/SmartCategoryDropdown';
 
 // Asset imports
 import almondImg from '../assests/almond-removebg-preview.png';
@@ -407,15 +408,30 @@ const Home = () => {
           SHOP BY POPULAR CATEGORIES
          ========================================================================= */}
       <section className="container mb-5">
-        <div className="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
           <div>
             <span className="section-tag">FRESH & ORGANIC</span>
             <h2 className="section-title mb-0">Explore by Category</h2>
           </div>
-          <Link to="/bestsale" className="text-success fw-bold text-decoration-none d-flex align-items-center gap-1">
-            <span>View All Categories</span>
-            <i className="bi bi-arrow-right"></i>
-          </Link>
+          <div className="d-flex align-items-center gap-2">
+            <SmartCategoryDropdown 
+              currentCategory="" 
+              onSelectCategory={(category) => {
+                if (!category || category === "All") {
+                  navigate('/bestsale');
+                } else if (category === "promotion") {
+                  navigate('/promotion');
+                } else {
+                  navigate(`/bestsale?category=${encodeURIComponent(category)}`);
+                }
+              }}
+              variant="standalone"
+            />
+            <Link to="/bestsale" className="text-success fw-bold text-decoration-none d-none d-md-flex align-items-center gap-1 ms-2">
+              <span>View All</span>
+              <i className="bi bi-arrow-right"></i>
+            </Link>
+          </div>
         </div>
 
         <div className="row g-4">

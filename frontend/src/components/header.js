@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import SmartCategoryDropdown from './SmartCategoryDropdown';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -14,14 +15,21 @@ const Header = () => {
   const [searchParams] = useSearchParams();
   const currentCategory = searchParams.get("category") || "";
 
-  const handleCategoryChange = (e) => {
-    const category = e.target.value;
+  const handleCategorySelect = (category) => {
     if (!category || category === "All") {
-      navigate('/bestsale');
+      if (searchTerm.trim()) {
+        navigate(`/bestsale?query=${encodeURIComponent(searchTerm.trim())}`);
+      } else {
+        navigate('/bestsale');
+      }
     } else if (category === "promotion") {
       navigate('/promotion');
     } else {
-      navigate(`/bestsale?category=${encodeURIComponent(category)}`);
+      if (searchTerm.trim()) {
+        navigate(`/bestsale?category=${encodeURIComponent(category)}&query=${encodeURIComponent(searchTerm.trim())}`);
+      } else {
+        navigate(`/bestsale?category=${encodeURIComponent(category)}`);
+      }
     }
   };
 
@@ -116,23 +124,12 @@ const Header = () => {
             {/* Grocery Search Bar */}
             <div className="col-12 col-md flex-grow-1 order-3 order-md-2">
               <form onSubmit={handleSearch} className="grocery-search-wrapper">
-                <select 
-                  className="grocery-search-select d-none d-sm-block" 
-                  value={currentCategory} 
-                  onChange={handleCategoryChange}
-                  aria-label="Select Category"
-                >
-                  <option value="">All Categories</option>
-                  <option value="Fruits">🍎 Fruits</option>
-                  <option value="Vegetables">🥬 Vegetables</option>
-                  <option value="Dry Fruits">🥜 Nuts & Dry Fruits</option>
-                  <option value="Cold Beverages">🥤 Cold Beverages</option>
-                  <option value="Flours">🌾 Flours & Grains</option>
-                  <option value="Chocolates">🍫 Chocolates & Sweets</option>
-                  <option value="Snacks">🍿 Snacks & Munchies</option>
-                  <option value="Spices">🌶️ Spices & Masalas</option>
-                  <option value="promotion">🎁 Promotions</option>
-                </select>
+                <SmartCategoryDropdown 
+                  currentCategory={currentCategory} 
+                  onSelectCategory={handleCategorySelect}
+                  searchTerm={searchTerm}
+                  variant="navbar"
+                />
 
                 <div className="grocery-search-input-wrap">
                   <i className="bi bi-search grocery-search-icon"></i>
